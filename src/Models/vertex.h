@@ -6,7 +6,8 @@
 namespace s21 {
     class Vertex {
         public:
-
+            Vertex() = default;
+            ~Vertex() = default;
             void SetPosition(Point3D xyz) { position_ = xyz; };
             Point3D& GetPosition() noexcept { return position_; };
 

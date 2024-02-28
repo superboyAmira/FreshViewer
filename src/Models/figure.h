@@ -16,7 +16,7 @@ namespace s21
     class Figure : SceneObject {
         public:
             Figure() = default;
-            ~Figure() = default;
+            ~Figure() noexcept = default;
 
             void AddEdge(Edge edge) { edges_.push_back(edge); };
             void AddVertex(Vertex vertex) { vertices_.push_back(vertex); };

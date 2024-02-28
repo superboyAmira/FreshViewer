@@ -47,10 +47,8 @@ namespace s21 {
                         sscanf(line.c_str(), "%*s %lf %lf %lf", &xyz->X, &xyz->Y, &xyz->Z);
                         vertex->SetPosition(*xyz);
                         figure->AddVertex(*vertex);
-                        // i++;
                     } else if (line[0] == 'f' && line[1] == ' ') {
                         SaveDataPolygon(line.substr(2), figure);
-                        // p++;
                     }
                 }
                 scene_.AddFigure(figure);

@@ -5,9 +5,9 @@ namespace s21
 {
     
     typedef struct Point3D {
-        double X;
-        double Y;
-        double Z;
+        double X = 0.0;
+        double Y = 0.0;
+        double Z = 0.0;
     } Point3D;
 
 } // namespace s21

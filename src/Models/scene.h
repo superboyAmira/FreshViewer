@@ -1,8 +1,6 @@
 #ifndef SRC_MODELS_SCENE_H_
 #define SRC_MODELS_SCENE_H_
 
-#include <vector>
-
 #include "Matrix/matrix.h"
 #include "figure.h"
 
