@@ -20,8 +20,8 @@ namespace s21
 
             void AddEdge(Edge edge) { edges_.push_back(edge); };
             void AddVertex(Vertex vertex) { vertices_.push_back(vertex); };
-            std::vector<Vertex>* GetVertices() const noexcept { return &vertices_; };
-            std::vector<Edge>* GetEdges() const noexcept { return &edges_; };
+            std::vector<Vertex>& GetVertices() noexcept { return vertices_; };
+            std::vector<Edge>& GetEdges() noexcept { return edges_; };
 
             void Transform(Matrix matrix) override {};
         private:

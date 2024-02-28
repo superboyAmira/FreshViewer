@@ -10,14 +10,14 @@
 namespace s21 {
     class BaseFileReader {
         public:
-            virtual ~BaseFileReader() = default;
+            virtual ~BaseFileReader() noexcept = default;
             virtual Scene* ReadScene(std::string path) = 0;
     };
 
     class Reader : BaseFileReader {
         public:
             Reader() = default;
-            ~Reader() noexcept = default;
+            ~Reader() noexcept override = default;
 
             Scene* ReadScene(std::string path) override {
                 file_stream_.open(path);
@@ -60,9 +60,10 @@ namespace s21 {
             void SaveDataPolygon(std::string f_line, Figure* figure) noexcept {
                 std::istringstream iss(f_line);
                 std::string token;
-                int first_num = 0, current_num = 0;
+                std::vector<Vertex> vertices = figure->GetVertices();
                 Edge* tmp_edge = new Edge();
-                std::vector<Vertex>* vertices = figure->GetVertices();
+                Vertex* first_vertex = new Vertex();
+                int first_num = 0, current_num = 0;
 
                 iss >> token;
                 auto slash_pos = token.find('/');
@@ -71,22 +72,24 @@ namespace s21 {
                 } else {
                     first_num = std::stoi(token) - 1;
                 }
-                Vertex first_vertex = vertices->at(first_num); 
-                tmp_edge->SetBegin(&first_vertex);
+                *first_vertex = vertices.at(first_num); 
+                tmp_edge->SetBegin(first_vertex);
 
                 while (iss >> token) {
+                    Vertex* curr_vertex = new Vertex();
                     slash_pos = token.find('/');
                     if (slash_pos != std::string::npos) {
                         current_num = std::stoi(token.substr(0, slash_pos)) - 1;
                     } else {
                         current_num = std::stoi(token) - 1;
                     }
-                    Vertex curr_vertex = vertices->at(current_num);
-                    tmp_edge->SetEnd(&curr_vertex);
+                    *curr_vertex = vertices.at(current_num);
+                    tmp_edge->SetEnd(curr_vertex);
                     figure->AddEdge(*tmp_edge);
-                    tmp_edge->SetBegin(&curr_vertex);
+                    tmp_edge->clear();
+                    tmp_edge->SetBegin(curr_vertex);
                 }
-                tmp_edge->SetEnd(&first_vertex);
+                tmp_edge->SetEnd(first_vertex);
                 figure->AddEdge(*tmp_edge);
             };
 

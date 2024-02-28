@@ -6,38 +6,6 @@
 
 namespace s21
 {
-    class Facade {
-    public:
-        FacadeOperationResult DrawScene() {};
-
-        FacadeOperationResult LoadScene(std::string path) {
-            FacadeOperationResult status;
-            try {
-                file_reader_ = new Reader();
-                scene_ = file_reader_->ReadScene(path);
-            } catch (std::invalid_argument* err) {
-                status.SetErrorMessage(err->what());
-                status.SetStatus(false);
-            } catch (...) {
-                status.SetErrorMessage("Another trouble/LoadScene/Facade");
-                status.SetStatus(false);
-            }
-            return status;
-        };
-
-        FacadeOperationResult MoveScene(double x, double y, double z) {
-
-        };
-
-        FacadeOperationResult RotateScene(double x, double y, double z) {};
-
-        FacadeOperationResult ScaleScene(double x, double y, double z) {};
-    private:
-        BaseFileReader* file_reader_;
-        Scene* scene_;
-        SceneDrawerBase scene_drawer_;
-    };
-
     class FacadeOperationResult {
         public:
             FacadeOperationResult() {
@@ -54,6 +22,40 @@ namespace s21
         private:
             std::string errorMessage_;
             bool is_success_;  
+    };
+
+    class Facade {
+    public:
+        Facade() : file_reader_(nullptr), scene_(nullptr) {};
+        ~Facade() noexcept = default;
+
+
+        // FacadeOperationResult DrawScene() {};
+
+        FacadeOperationResult LoadScene(std::string path) {
+            FacadeOperationResult status = FacadeOperationResult();
+            try {
+                file_reader_ = new Reader();
+                scene_ = file_reader_->ReadScene(path);
+            } catch (std::invalid_argument* err) {
+                status.SetErrorMessage(err->what());
+                status.SetStatus(false);
+            } catch (...) {
+                status.SetErrorMessage("Another trouble/LoadScene/Facade");
+                status.SetStatus(false);
+            }
+            return status;
+        };
+
+        // FacadeOperationResult MoveScene(double x, double y, double z) {};
+
+        // FacadeOperationResult RotateScene(double x, double y, double z) {};
+
+        // FacadeOperationResult ScaleScene(double x, double y, double z) {};
+    private:
+        Reader* file_reader_;
+        Scene* scene_;
+        // SceneDrawerBase scene_drawer_;
     };
 } // namespace s21
 

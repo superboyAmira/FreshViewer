@@ -12,7 +12,7 @@ namespace s21 {
             void AddFigure(Figure* figure) noexcept { 
                 figures_.push_back(*figure);
             };
-            std::vector<Figure>* GetFigures() const noexcept { return &figures_; };
+            std::vector<Figure>& GetFigures() noexcept { return figures_; };
             void Transform(Matrix& matrix) {};
 
         private:

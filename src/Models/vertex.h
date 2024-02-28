@@ -8,7 +8,7 @@ namespace s21 {
         public:
 
             void SetPosition(Point3D xyz) { position_ = xyz; };
-            Point3D* GetPosition() const noexcept { return &position_; };
+            Point3D& GetPosition() noexcept { return position_; };
 
             void Transform() {};
         private:
