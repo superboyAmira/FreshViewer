@@ -6,6 +6,8 @@
 namespace s21 {
     class Vertex {
         public:
+
+            void SetPosition(Point3D xyz) { position_ = xyz; };
             Point3D* GetPosition() const noexcept { return &position_; };
 
             void Transform() {};

@@ -2,7 +2,8 @@
 #define SRC_MODELS_FILE_READER_H_
 
 #include <fstream>
-#include <vector>
+#include <sstream>
+#include <string>
 
 #include "scene.h"
 
@@ -15,8 +16,9 @@ namespace s21 {
 
     class Reader : BaseFileReader {
         public:
-            Reader() {};
-            ~Reader() noexcept {};
+            Reader() = default;
+            ~Reader() noexcept = default;
+
             Scene* ReadScene(std::string path) override {
                 file_stream_.open(path);
                 if (!file_stream_.is_open() || file_stream_.peek() == EOF) {
@@ -33,33 +35,35 @@ namespace s21 {
             void SaveData() noexcept {
                 scene_ = Scene();
                 file_stream_.seekg(0);
+                Point3D* xyz = new Point3D();
+                Vertex* vertex = new Vertex();
+                Figure* figure = new Figure();
+
                 std::string line;
-                size_t p = 1, i = 1;
-                double first = 0.0, second = 0.0, third = 0.0;
+                // size_t p = 1, i = 1;
+                
                 while (getline(file_stream_, line)) {
                     if (line[0] == 'v' && line[1] == ' ') {
-                        sscanf(line.c_str(), "%*s %lf %lf %lf", &first, &second, &third);
-                        scene_.AddVertices(first);
-                        scene_.AddVertices(second);
-                        scene_.AddVertices(third);
-                        i++;
+                        sscanf(line.c_str(), "%*s %lf %lf %lf", &xyz->X, &xyz->Y, &xyz->Z);
+                        vertex->SetPosition(*xyz);
+                        figure->AddVertex(*vertex);
+                        // i++;
                     } else if (line[0] == 'f' && line[1] == ' ') {
-                        // Передача строки с отделением первых двух символов ("f ")
-                        SaveDataPolygon(line.substr(2));
-                        p++;
+                        SaveDataPolygon(line.substr(2), figure);
+                        // p++;
                     }
                 }
+                scene_.AddFigure(figure);
                 file_stream_.close();
             };
 
-            void SaveDataPolygon(std::string f_line) noexcept {
-                 // Разбиваем строку на токены, используя пробельные символы в качестве
-                // разделителей
+            void SaveDataPolygon(std::string f_line, Figure* figure) noexcept {
                 std::istringstream iss(f_line);
                 std::string token;
                 int first_num = 0, current_num = 0;
+                Edge* tmp_edge = new Edge();
+                std::vector<Vertex>* vertices = figure->GetVertices();
 
-                // Обработка первого числа линии
                 iss >> token;
                 auto slash_pos = token.find('/');
                 if (slash_pos != std::string::npos) {
@@ -67,24 +71,23 @@ namespace s21 {
                 } else {
                     first_num = std::stoi(token) - 1;
                 }
-                scene_.AddLines(current_num);
+                Vertex first_vertex = vertices->at(first_num); 
+                tmp_edge->SetBegin(&first_vertex);
 
                 while (iss >> token) {
-                    // Ищем символ "/"
                     slash_pos = token.find('/');
                     if (slash_pos != std::string::npos) {
-                        // Если символ "/" найден, берем только то, что до него
                         current_num = std::stoi(token.substr(0, slash_pos)) - 1;
                     } else {
-                        // Если символ "/" не найден, берем весь токен
                         current_num = std::stoi(token) - 1;
                     }
-
-                    scene_.AddLines(current_num);
-                    scene_.AddLines(current_num);
+                    Vertex curr_vertex = vertices->at(current_num);
+                    tmp_edge->SetEnd(&curr_vertex);
+                    figure->AddEdge(*tmp_edge);
+                    tmp_edge->SetBegin(&curr_vertex);
                 }
-                // Для замыкания фигуры
-                scene_.AddLines(first_num);
+                tmp_edge->SetEnd(&first_vertex);
+                figure->AddEdge(*tmp_edge);
             };
 
     };

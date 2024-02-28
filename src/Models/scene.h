@@ -9,7 +9,10 @@
 namespace s21 {
     class Scene {
         public:
-            Figure* GetFigure() const noexcept { return &figures_; };
+            void AddFigure(Figure* figure) noexcept { 
+                figures_.push_back(*figure);
+            };
+            std::vector<Figure>* GetFigures() const noexcept { return &figures_; };
             void Transform(Matrix& matrix) {};
 
         private:

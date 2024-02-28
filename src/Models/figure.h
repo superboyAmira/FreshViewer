@@ -10,11 +10,16 @@
 namespace s21
 {
     class SceneObject {
-        virtual void Transform(Matrix matrix) {};
+        virtual void Transform(Matrix matrix) = 0;
     };
     
     class Figure : SceneObject {
         public:
+            Figure() = default;
+            ~Figure() = default;
+
+            void AddEdge(Edge edge) { edges_.push_back(edge); };
+            void AddVertex(Vertex vertex) { vertices_.push_back(vertex); };
             std::vector<Vertex>* GetVertices() const noexcept { return &vertices_; };
             std::vector<Edge>* GetEdges() const noexcept { return &edges_; };
 

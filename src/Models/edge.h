@@ -6,6 +6,10 @@
 namespace s21 {
     class Edge {
         public:
+            void SetBegin(Vertex* begin) { begin_ = begin; };
+            void SetEnd(Vertex* end) { end_ = end; };
+
+
             Vertex* GetBegin() const noexcept { return begin_; };
 
             Vertex* GetEnd() const noexcept { return end_; };

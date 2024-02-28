@@ -8,10 +8,21 @@ namespace s21
 {
     class TransformMatrix {
         public:
-            Point3D* TransformPoint(Point3D points) {};
+            Point3D* TransformPoint(Point3D points) {
+                
+            };
         private:
             Matrix matrix_;
 
+    };
+
+    class TransformMatrixBuilder {
+        public:
+            static TransformMatrix CreateRotationMatrix(double x, double y, double z) {};
+            static TransformMatrix CreateMoveMatrix(double x, double y, double z) {};
+            static TransformMatrix CreateScaleMatrix(double x, double y, double z) {};
+        private:
+            TransformMatrix matrix_;
     };
 } // namespace s21
 
