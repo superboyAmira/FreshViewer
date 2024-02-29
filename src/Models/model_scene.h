@@ -40,7 +40,6 @@ namespace s21
             }
         };
 
-
         // FacadeOperationResult DrawScene() {
 
         // };
@@ -117,6 +116,10 @@ namespace s21
                 status.SetStatus(false);
             }
             return status;
+        };
+
+        Scene& GetScene() const noexcept {
+            return *scene_;
         };
     private:
         Reader* file_reader_;
