@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-0e249f2b78dd33fb9ae1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "QtSceneDrawer",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "QtSceneDrawer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtSceneDrawer-Debug-d386a8f04001e17e3ce5.json",
+					"name" : "QtSceneDrawer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "QtSceneDrawer_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtSceneDrawer_autogen-Debug-8e14130e0b7ca6acb6e2.json",
+					"name" : "QtSceneDrawer_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "QtSceneDrawer_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtSceneDrawer_autogen_timestamp_deps-Debug-14339ee49f4beb46b977.json",
+					"name" : "QtSceneDrawer_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/superboy/FreshViewer/src/build-QtSceneDrawer-Desktop_Qt_6_6_2_GCC_64bit-Debug",
+		"source" : "/home/superboy/FreshViewer/src/QtSceneDrawer"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
