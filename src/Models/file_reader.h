@@ -39,12 +39,14 @@ namespace s21 {
                 Vertex* vertex = new Vertex();
                 Figure* figure = new Figure();
 
-                std::string line;
+                std::string line = std::string();
+                size_t index = 0;
                 // size_t p = 1, i = 1;
                 
                 while (getline(file_stream_, line)) {
                     if (line[0] == 'v' && line[1] == ' ') {
                         sscanf(line.c_str(), "%*s %lf %lf %lf", &xyz->X, &xyz->Y, &xyz->Z);
+                        xyz->index = index++;
                         vertex->SetPosition(*xyz);
                         figure->AddVertex(*vertex);
                     } else if (line[0] == 'f' && line[1] == ' ') {

@@ -3,14 +3,14 @@
 
 #include <vector>
 
-#include "Matrix/matrix.h"
+// #include "Matrix/matrix.h"
 #include "vertex.h"
 #include "edge.h"
 
 namespace s21
 {
     class SceneObject {
-        virtual void Transform(Matrix matrix) = 0;
+        // virtual void Transform(Matrix matrix) = 0;
     };
     
     class Figure : SceneObject {
@@ -23,7 +23,7 @@ namespace s21
             std::vector<Vertex>& GetVertices() noexcept { return vertices_; };
             std::vector<Edge>& GetEdges() noexcept { return edges_; };
 
-            void Transform(Matrix matrix) override {};
+            // void Transform(Matrix matrix) override {};
         private:
             std::vector<Vertex> vertices_;
             std::vector<Edge> edges_;

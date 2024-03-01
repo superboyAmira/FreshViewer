@@ -7,13 +7,13 @@
 
 namespace s21
 {
-    class FacadeOperationResult {
+    class ModelOperationResult {
         public:
-            FacadeOperationResult() {
+            ModelOperationResult() {
                 errorMessage_ = "";
                 is_success_ = true;
             };
-            ~FacadeOperationResult() noexcept = default;
+            ~ModelOperationResult() noexcept = default;
 
             void SetErrorMessage(std::string err) noexcept { errorMessage_ = err; };
             void SetStatus(bool status) noexcept { is_success_ = status; };
@@ -35,17 +35,10 @@ namespace s21
             if (file_reader_ != nullptr) {
                 delete file_reader_;
             }
-            if (scene_ != nullptr) {
-                delete scene_;
-            }
         };
 
-        // FacadeOperationResult DrawScene() {
-
-        // };
-
-        FacadeOperationResult LoadScene(std::string path) {
-            FacadeOperationResult status = FacadeOperationResult();
+        ModelOperationResult LoadScene(std::string path) {
+            ModelOperationResult status = ModelOperationResult();
             try {
                 file_reader_ = new Reader();
                 scene_ = file_reader_->ReadScene(path);
@@ -59,8 +52,8 @@ namespace s21
             return status;
         };
 
-        FacadeOperationResult MoveScene(double x, double y, double z) {
-            FacadeOperationResult status = FacadeOperationResult();
+        ModelOperationResult MoveScene(double x, double y, double z) {
+            ModelOperationResult status = ModelOperationResult();
             try {
                 MoveTransformation* transfer = new MoveTransformation();
                 if (abs(x) > 1e-7) {
@@ -81,8 +74,8 @@ namespace s21
             return status;
         };
 
-        FacadeOperationResult RotateScene(double x, double y, double z) {
-            FacadeOperationResult status = FacadeOperationResult();
+        ModelOperationResult RotateScene(double x, double y, double z) {
+            ModelOperationResult status = ModelOperationResult();
             try {
                 RotateTransformation* transfer = new RotateTransformation();
                 if (abs(x) > 1e-7) {
@@ -103,8 +96,8 @@ namespace s21
             return status;
         };
 
-        FacadeOperationResult ScaleScene(double scale) {
-            FacadeOperationResult status = FacadeOperationResult();
+        ModelOperationResult ScaleScene(double scale) {
+            ModelOperationResult status = ModelOperationResult();
             try {
                 ScaleTransformation* transfer = new ScaleTransformation();
                 if (abs(scale) > 1e-7) {
@@ -118,12 +111,40 @@ namespace s21
             return status;
         };
 
-        Scene& GetScene() const noexcept {
-            return *scene_;
+        /* Не по диаграмме. Эти геттеры нужны для сохранения паттерна Фасад */
+
+        Scene* GetScene() const noexcept {
+            return scene_;
+        };
+
+        std::vector<double>* GetVertices() {
+            vertices_.clear();
+            for (auto it_figure = scene_->GetFigures().begin(); it_figure != scene_->GetFigures().end(); ++it_figure) {
+                for (auto it_vertex = it_figure.base()->GetVertices().begin(); it_vertex != it_figure.base()->GetVertices().end(); ++it_vertex) {
+                    vertices_.push_back(it_vertex.base()->GetPosition().X);
+                    vertices_.push_back(it_vertex.base()->GetPosition().Y);
+                    vertices_.push_back(it_vertex.base()->GetPosition().Z);
+                }
+            }
+            return &vertices_;
+        };
+
+        std::vector<int>* GetLines() {
+            lines_.clear();
+            for (auto it_figure = scene_->GetFigures().begin(); it_figure != scene_->GetFigures().end(); ++it_figure) {
+                for (auto it_edges = it_figure.base()->GetEdges().begin(); it_edges != it_figure.base()->GetEdges().end(); ++it_edges) {
+                    lines_.push_back(it_edges.base()->GetBegin()->GetPosition().index);
+                    lines_.push_back(it_edges.base()->GetEnd()->GetPosition().index);
+                }
+            }
+            return &lines_;
         };
     private:
         Reader* file_reader_;
         Scene* scene_;
+
+        std::vector<double> vertices_;
+        std::vector<int> lines_;
     };
 } // namespace s21
 

@@ -1,7 +1,8 @@
 #ifndef SRC_MODELS_SCENE_H_
 #define SRC_MODELS_SCENE_H_
 
-#include "Matrix/matrix.h"
+// #include "Matrix/matrix.h"
+#include <cmath>
 #include "figure.h"
 
 namespace s21 {
@@ -11,7 +12,7 @@ namespace s21 {
                 figures_.push_back(*figure);
             };
             std::vector<Figure>& GetFigures() noexcept { return figures_; };
-            void Transform(Matrix& matrix) {};
+            // void Transform(Matrix& matrix) {};
 
         private:
             std::vector<Figure> figures_;

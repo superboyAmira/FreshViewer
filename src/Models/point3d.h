@@ -8,6 +8,7 @@ namespace s21
         double X = 0.0;
         double Y = 0.0;
         double Z = 0.0;
+        size_t index;
     } Point3D;
 
 } // namespace s21
