@@ -21,7 +21,9 @@ private slots:
 
     void LoadScene(QString path);
 
-    void RotateScene(int value);
+    void RotateScene(double x, double y, double z);
+
+    void MoveScene(double x, double y, double z);
 
     void ScaleScene(double scale);
 
@@ -29,6 +31,7 @@ private:
     std::string path_;
     s21::ModelScene& model_;
     s21::View& view_;
+
 };
 
 }

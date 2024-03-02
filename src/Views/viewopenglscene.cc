@@ -29,7 +29,7 @@ void s21::ViewOpenGLScene::resizeGL(int width, int height) {
     glViewport(0,0,width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1,1,-1,1,1, 10000);
+    glFrustum(-1,1,-1,1,1, 1000000);
 };
 
 void s21::ViewOpenGLScene::paintGL() {
@@ -45,18 +45,12 @@ void s21::ViewOpenGLScene::paintGL() {
     glRotated(yRot, 0, 1, 0);
 
     glVertexPointer(3, GL_DOUBLE, 0, vertices_.data());
-    glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_VERTEX_ARRAY);
         glColor3d(1.0,0.0,0.0);
-    glDrawElements(GL_LINES, lines_.size(), GL_UNSIGNED_INT, lines_.data());
+        glDrawElements(GL_LINES, lines_.size(), GL_UNSIGNED_INT, lines_.data());
         glColor3d(0.0,0.0,1.0);
-
-    // glEnable(GL_POINT_SMOOTH);
-    glPointSize(8);
-
-    glDrawArrays(GL_POINTS, 0, vertices_.size() / 3);
-
-    // glDisable(GL_POINT_SMOOTH);
-
+        glPointSize(3);
+        glDrawArrays(GL_POINTS, 0, vertices_.size() / 3);
     glDisableClientState(GL_VERTEX_ARRAY);
 };
 

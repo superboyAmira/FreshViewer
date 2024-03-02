@@ -3,16 +3,24 @@
 
 #include "scene.h"
 
+/*
+В данном классе используется поведенческий паттерн Шаблонный метод.
+BaseTransformation выступает в роли абстрактного класса (интерфейса)
+для производных классов MoveTransformation, RotateTransformation, ScaleTransformation.
+*/
+
 namespace s21
 {
     class BaseTransormation {
         public:
+            virtual ~BaseTransormation() = default;
             virtual void TransformSceneX(double x, Scene& scene) = 0;
             virtual void TransformSceneY(double y, Scene& scene) = 0;
             virtual void TransformSceneZ(double z, Scene& scene) = 0;
+            // virtual void TransformSceneScale(double angle, Scene& scene);
     };
 
-    class MoveTransformation : BaseTransormation {
+    class MoveTransformation : public BaseTransormation {
         public:
             MoveTransformation() = default;
             ~MoveTransformation() noexcept = default; 
@@ -34,7 +42,7 @@ namespace s21
             };
     };
 
-    class RotateTransformation : BaseTransormation {
+    class RotateTransformation : public BaseTransormation {
         public:
             RotateTransformation() = default;
             ~RotateTransformation() noexcept = default; 
@@ -64,7 +72,7 @@ namespace s21
             };
     };
 
-    class ScaleTransformation : BaseTransormation {
+    class ScaleTransformation : public BaseTransormation {
         public:
             ScaleTransformation() = default;
             ~ScaleTransformation() noexcept = default; 

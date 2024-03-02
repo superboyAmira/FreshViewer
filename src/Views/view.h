@@ -28,12 +28,20 @@ public:
 signals:
     void ControllerOpenFile(QString path);
 
-    void ControllerRotateModel(int value);
+    void ControllerRotateModel(double x, double y, double z);
+
+    void ControllerMoveModel(double x, double y, double z);
+
+    void ControllerScaleModel(double scale);
 
 private slots:
     void on_pushButton_clicked();
 
-    void on_horizontalSlider_rotate_valueChanged(int value);
+    void on_pushButton_rotate_clicked();
+
+    void on_pushButton_move_clicked();
+
+    void on_pushButton_scale_clicked();
 
 private:
     Ui::View *ui;

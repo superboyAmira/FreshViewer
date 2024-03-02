@@ -41,7 +41,6 @@ namespace s21 {
 
                 std::string line = std::string();
                 size_t index = 0;
-                // size_t p = 1, i = 1;
                 
                 while (getline(file_stream_, line)) {
                     if (line[0] == 'v' && line[1] == ' ') {
@@ -60,7 +59,7 @@ namespace s21 {
             void SaveDataPolygon(std::string f_line, Figure* figure) noexcept {
                 std::istringstream iss(f_line);
                 std::string token;
-                std::vector<Vertex> vertices = figure->GetVertices();
+                std::vector<Vertex>& vertices = figure->GetVertices();
                 Edge* tmp_edge = new Edge();
                 Vertex* first_vertex = new Vertex();
                 int first_num = 0, current_num = 0;
@@ -92,7 +91,6 @@ namespace s21 {
                 tmp_edge->SetEnd(first_vertex);
                 figure->AddEdge(*tmp_edge);
             };
-
     };
 
 } // namespace s21

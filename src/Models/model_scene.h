@@ -5,6 +5,12 @@
 #include "scene.h"
 #include "affine_transformations.h"
 
+/*
+В данном классе используется структурный паттерн Фасад.
+ModelScene выступает в роли фасада для большого набора классов реализующих парсинг
+и хранения данных их .obj файлов. Клиентом выступает Controller.
+*/
+
 namespace s21
 {
     class ModelOperationResult {
@@ -25,9 +31,6 @@ namespace s21
             bool is_success_;  
     };
 
-    /*
-    \brief Основной класс модели, реализующий паттерн Фасад.
-    */
     class ModelScene {
     public:
         ModelScene() : file_reader_(nullptr), scene_(nullptr) {};
@@ -55,7 +58,7 @@ namespace s21
         ModelOperationResult MoveScene(double x, double y, double z) {
             ModelOperationResult status = ModelOperationResult();
             try {
-                MoveTransformation* transfer = new MoveTransformation();
+                BaseTransormation* transfer = new MoveTransformation();
                 if (abs(x) > 1e-7) {
                     transfer->TransformSceneX(x, *scene_);
                 }
@@ -77,7 +80,7 @@ namespace s21
         ModelOperationResult RotateScene(double x, double y, double z) {
             ModelOperationResult status = ModelOperationResult();
             try {
-                RotateTransformation* transfer = new RotateTransformation();
+                BaseTransormation* transfer = new RotateTransformation();
                 if (abs(x) > 1e-7) {
                     transfer->TransformSceneX(x, *scene_);
                 }
@@ -99,7 +102,7 @@ namespace s21
         ModelOperationResult ScaleScene(double scale) {
             ModelOperationResult status = ModelOperationResult();
             try {
-                ScaleTransformation* transfer = new ScaleTransformation();
+                BaseTransormation* transfer = new ScaleTransformation();
                 if (abs(scale) > 1e-7) {
                     transfer->TransformSceneX(scale, *scene_);
                 }
