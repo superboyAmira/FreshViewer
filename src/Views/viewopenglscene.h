@@ -3,14 +3,20 @@
 
 #include <QWidget>
 #include <QMouseEvent>
-
+#include <QSettings>
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QOpenGLContext>
 
-
 namespace s21 {
+
+enum  ProjectrionType { CENTRAL, PARALLEL };
+
+enum VerticesType { QUAD, ROUNDED, NONE };
+
+enum LinesType { SOLID, DOTTED };
+
 class ViewOpenGLScene : public QOpenGLWidget
 {
     Q_OBJECT
@@ -20,8 +26,10 @@ public:
     void LoadScene();
 
     void SetVertices(std::vector<double>&);
+
     void SetLines(std::vector<int>&);
-signals:
+
+    QSettings* GetState();
 
 protected:
     void initializeGL() override;
@@ -40,7 +48,14 @@ private:
     void mouseMoveEvent(QMouseEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
     void wheelEvent(QWheelEvent *) override;
+
+    /*
+     * Settings
+     */
+    QSettings state_;
+    void SetDefault();
 };
+
 }
 
 #endif // VIEWOPENGLSCENE_H

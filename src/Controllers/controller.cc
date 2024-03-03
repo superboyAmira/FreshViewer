@@ -21,7 +21,7 @@ void s21::Controller::RotateScene(double x, double y, double z) {
     model_.RotateScene(x, y, z);
     view_.SetVertices(model_.GetVertices());
     view_.SetLines(model_.GetLines());
-}
+};
 
 void s21::Controller::MoveScene(double x, double y, double z) {
     model_.MoveScene(x, y, z);

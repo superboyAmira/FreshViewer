@@ -1,17 +1,59 @@
 G++ = g++ -std=c++17
 CHECKFLAGS = -Wall -Werror -Wextra
 TEST_LIBS = -lgtest -pthread
-TEST_SRC = vector/vector_test.cc set/set_test.cc map/map_test.cc array/array_test.cc stack/stack_test.cc queue/queue_test.cc 
+TEST_SRC = GTest/*.cc
 TEST_NAME = test
 
+ifeq ($(OS), Darwin)
+	NAME_APP=3DViewerV2.app
+else
+	NAME_APP=3DViewerV2
+endif
+
+P_NAME = FreshViewer
+P_VIEW_DIR = Views
+P_BUILD_DIR = build
+P_DOCS_DIR = Docs
+
+
+
 all: clean test
+
+install:
+	rm -rf build
+	mkdir build
+	cd Views && qmake && make && mv 3DViewer.app ../build && cd ..
+
+uninstall:
+	rm -rf build*
+	rm -rf qt_files/moc*
+	rm -rf qt_files/*.o
+	rm -rf qt_files/ui*
+
+doxygen:
+	rm -rf $(P_DOCS_DIR)
+	doxygen Doxyfile
+	echo "Documentation created ($(PWD)/$(P_DOCS_DIR)/html/annotated.html)."
+
+dvi: doxygen
+	open ./$(P_DOCS_DIR)/html/annotated.html
+
+dist: install
+	rm -rf Archive_3DViewer/
+	mkdir Archive_3DViewer/
+	mkdir Archive_3DViewer/src
+	cp -r ./build/3DViewer.app Archive_3DViewer/src/
+	tar cvzf Archive_3DViewer.tgz Archive_3DViewer/
+	rm -rf Archive_3DViewer/
 
 test: 
 	$(G++) $(CHECKFLAGS) $(TEST_SRC) -o $(TEST_NAME) $(TEST_LIBS) -g
 	./$(TEST_NAME) --gtest_break_on_failure
 
 clean:
+	@echo "\e[32mClean s in progress...\e[0m"
 	rm -rf lib_obj test lib/*.o ./*.a ./*.o ./a.out gcov_test *.html *.css report lib/*.dSYM ./*.gcno ./*.gcda ./*.info ./*.dSYM ./CPPLINT*
+	@echo "\e[32mClean done!\e[0m"
 
 gcov_report: clean
 	$(G++) $(CHECKFLAGS) $(TEST_SRC) $(TEST_LIBS) -coverage -o gcov_test

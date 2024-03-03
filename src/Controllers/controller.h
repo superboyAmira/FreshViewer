@@ -13,9 +13,7 @@ class Controller : public QObject
 {
     Q_OBJECT
 public:
-    // explicit Controller(QObject *parent = nullptr);
-
-    Controller(View& view, s21::ModelScene& model);
+    Controller(s21::View& view, s21::ModelScene& model);
 
 private slots:
 
@@ -31,7 +29,6 @@ private:
     std::string path_;
     s21::ModelScene& model_;
     s21::View& view_;
-
 };
 
 }

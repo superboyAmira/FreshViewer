@@ -3,8 +3,15 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <QColorDialog>
+#include <QSettings>
 
-#include "viewopenglscene.h"
+/*
+Использование способа организации кода MVC подразумевает структурную реализацию
+поведенческого паттерна Наблюдатель (Observer),
+в конкретике - Представление является Obreverable, а контроллер Observer, реагрующий на
+изменение модели путем связки сигналов представления с методами контроллера.
+*/
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +30,7 @@ public:
     ~View();
 
     void SetVertices(std::vector<double>* vertices);
+
     void SetLines(std::vector<int>* lines);
 
 signals:
@@ -34,6 +42,8 @@ signals:
 
     void ControllerScaleModel(double scale);
 
+    void ControllerSaveState(QSettings& state);
+
 private slots:
     void on_pushButton_clicked();
 
@@ -43,10 +53,16 @@ private slots:
 
     void on_pushButton_scale_clicked();
 
+    void on_pushButton_color_ver_clicked();
+
+    void on_pushButton_color_line_clicked();
+
+    void on_pushButton_color_proj_clicked();
+
+    void on_pushButton_redraw_clicked();
+
 private:
     Ui::View *ui;
-
-
 
 };
 

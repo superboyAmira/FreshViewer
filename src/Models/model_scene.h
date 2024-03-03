@@ -151,5 +151,4 @@ namespace s21
     };
 } // namespace s21
 
-
 #endif  // SRC_MODELS_FACADE_H_

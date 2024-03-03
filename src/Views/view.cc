@@ -18,8 +18,10 @@ void s21::View::on_pushButton_clicked()
     QString file_name =
         QFileDialog::getOpenFileName(this, tr("Open obj file"), "",
                                      tr("obj files (*.obj) ;; All files (*.*)"));
-    ui->label_file_name->setText("Path: " + file_name);
-    emit ControllerOpenFile(file_name);
+    if (file_name.size() > 0) {
+        ui->label_file_name->setText("Path: " + file_name);
+        emit ControllerOpenFile(file_name);
+    }
 }
 
 void s21::View::SetVertices(std::vector<double>* vertices) {
@@ -47,3 +49,41 @@ void s21::View::on_pushButton_scale_clicked()
     emit ControllerScaleModel(ui->doubleSpinBox_scale->value());
 }
 
+void s21::View::on_pushButton_color_ver_clicked()
+{
+    QColor color_ver = QColorDialog::getColor(Qt::blue, this, tr("Select color"));
+    ui->widget->GetState()->setValue("vertices_colorR", color_ver.redF());
+    ui->widget->GetState()->setValue("vertices_colorG", color_ver.greenF());
+    ui->widget->GetState()->setValue("vertices_colorB", color_ver.blueF());
+    ui->widget->update();
+}
+
+void s21::View::on_pushButton_color_line_clicked()
+{
+    QColor color_ver = QColorDialog::getColor(Qt::red, this, tr("Select color"));
+    ui->widget->GetState()->setValue("lines_colorR", color_ver.redF());
+    ui->widget->GetState()->setValue("lines_colorG", color_ver.greenF());
+    ui->widget->GetState()->setValue("lines_colorB", color_ver.blueF());
+    ui->widget->update();
+}
+
+void s21::View::on_pushButton_color_proj_clicked()
+{
+    QColor color_ver = QColorDialog::getColor(Qt::black, this, tr("Select color"));
+    ui->widget->GetState()->setValue("projection_colorR", color_ver.redF());
+    ui->widget->GetState()->setValue("projection_colorG", color_ver.greenF());
+    ui->widget->GetState()->setValue("projection_colorB", color_ver.blueF());
+    ui->widget->update();
+}
+
+void s21::View::on_pushButton_redraw_clicked()
+{
+    ui->widget->GetState()->setValue("vertices_size", ui->spinBox_size_ver->value());
+    ui->widget->GetState()->setValue("lines_size", ui->spinBox_size_line->value());
+
+    ui->widget->GetState()->setValue("vertices_type", ui->comboBox_type_ver->currentIndex());
+    ui->widget->GetState()->setValue("lines_type", ui->comboBox_type_line->currentIndex());
+
+    ui->widget->GetState()->setValue("projection_type", ui->comboBox_type_projection->currentIndex());
+    ui->widget->update();
+}
