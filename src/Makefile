@@ -51,3 +51,16 @@ GTest_install:
 	cd ..
 	sudo cp lib/* /usr/lib
 	echo -e "\e[32m[---Done---]\e[0m"
+
+
+install3d: 
+	rm -rf build
+	mkdir build
+	cmake -S Views -B build
+	make -C build
+	rm -rf ../build
+	mkdir ../build
+	cp build/Views ../build/
+	mv ../build/Views ../build/View_v2.0
+	rm -rf build
+	open ../build
