@@ -35,8 +35,8 @@ namespace s21 {
             void SaveData() noexcept {
                 scene_ = Scene();
                 file_stream_.seekg(0);
-                Point3D* xyz = new Point3D();
-                Vertex* vertex = new Vertex();
+                Point3D xyz;
+                Vertex vertex;
                 Figure* figure = new Figure();
 
                 std::string line = std::string();
@@ -44,15 +44,16 @@ namespace s21 {
                 
                 while (getline(file_stream_, line)) {
                     if (line[0] == 'v' && line[1] == ' ') {
-                        sscanf(line.c_str(), "%*s %lf %lf %lf", &xyz->X, &xyz->Y, &xyz->Z);
-                        xyz->index = index++;
-                        vertex->SetPosition(*xyz);
-                        figure->AddVertex(*vertex);
+                        sscanf(line.c_str(), "%*s %lf %lf %lf", &xyz.X, &xyz.Y, &xyz.Z);
+                        xyz.index = index++;
+                        vertex.SetPosition(xyz);
+                        figure->AddVertex(vertex);
                     } else if (line[0] == 'f' && line[1] == ' ') {
                         SaveDataPolygon(line.substr(2), figure);
                     }
                 }
                 scene_.AddFigure(figure);
+                // delete figure;
                 file_stream_.close();
             };
 
@@ -60,8 +61,7 @@ namespace s21 {
                 std::istringstream iss(f_line);
                 std::string token;
                 std::vector<Vertex>& vertices = figure->GetVertices();
-                Edge* tmp_edge = new Edge();
-                Vertex* first_vertex = new Vertex();
+                Edge tmp_edge;
                 int first_num = 0, current_num = 0;
 
                 iss >> token;
@@ -71,25 +71,22 @@ namespace s21 {
                 } else {
                     first_num = std::stoi(token) - 1;
                 }
-                *first_vertex = vertices.at(first_num); 
-                tmp_edge->SetBegin(first_vertex);
+                tmp_edge.SetBegin(&vertices.at(first_num));
 
                 while (iss >> token) {
-                    Vertex* curr_vertex = new Vertex();
                     slash_pos = token.find('/');
                     if (slash_pos != std::string::npos) {
                         current_num = std::stoi(token.substr(0, slash_pos)) - 1;
                     } else {
                         current_num = std::stoi(token) - 1;
                     }
-                    *curr_vertex = vertices.at(current_num);
-                    tmp_edge->SetEnd(curr_vertex);
-                    figure->AddEdge(*tmp_edge);
-                    tmp_edge->clear();
-                    tmp_edge->SetBegin(curr_vertex);
+                    tmp_edge.SetEnd(&vertices.at(current_num));
+                    figure->AddEdge(tmp_edge);
+                    tmp_edge.clear();
+                    tmp_edge.SetBegin(&vertices.at(current_num));
                 }
-                tmp_edge->SetEnd(first_vertex);
-                figure->AddEdge(*tmp_edge);
+                tmp_edge.SetEnd(&vertices.at(first_num));
+                figure->AddEdge(tmp_edge);
             };
     };
 
