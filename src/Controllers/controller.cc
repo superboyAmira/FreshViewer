@@ -11,10 +11,20 @@ s21::Controller::Controller(s21::View& view, s21::ModelScene& model) : view_(vie
     QObject::connect(&view_, &View::ControllerScaleModel, this, &s21::Controller::ScaleScene);
 };
 
+void tFunc(s21::View& v,s21::ModelScene& m) {
+    v.SetVertices(m.GetVertices());
+};
+
+void tFunc2(s21::View& v,s21::ModelScene& m) {
+    v.SetLines(m.GetLines());
+};
+
 void s21::Controller::LoadScene(QString path) {
     model_.LoadScene(path.toStdString());
-    view_.SetVertices(model_.GetVertices());
-    view_.SetLines(model_.GetLines());
+    std::thread first_tr(tFunc, std::ref(view_), std::ref(model_));
+    std::thread second_tr(tFunc2, std::ref(view_), std::ref(model_));
+    first_tr.join();
+    second_tr.join();
 };
 
 void s21::Controller::RotateScene(double x, double y, double z) {

@@ -5,14 +5,11 @@
 #include "scene.h"
 #include "affine_transformations.h"
 
-/*
-В данном классе используется структурный паттерн Фасад.
-ModelScene выступает в роли фасада для большого набора классов реализующих парсинг
-и хранения данных их .obj файлов. Клиентом выступает Controller.
-*/
-
 namespace s21
 {
+    /*!
+        \brief Returned класс для обработки результатов обработки .obj файла
+    */
     class ModelOperationResult {
         public:
             ModelOperationResult() {
@@ -31,6 +28,12 @@ namespace s21
             bool is_success_;  
     };
 
+    /*!
+        \brief Основной класс модели для загрузки и обработки модели.
+        \detais В данной системе классов используется структурный паттерн Фасад.
+        ModelScene выступает в роли фасада для большого набора классов реализующих парсинг
+        и хранения данных их .obj файлов. Клиентом выступает Controller.
+    */
     class ModelScene {
     public:
         ModelScene() : file_reader_(nullptr), scene_(nullptr) {};
@@ -40,6 +43,11 @@ namespace s21
             }
         };
 
+        /*!
+            \brief Метод для загрузки и первичной обработки 3Д модели.
+            \param path путь файла
+            \exception При некорректном path вызывает исключение std::invalid_argument, при ошибки выделения памяти вызывает исключение std::bad_alloc.
+        */
         ModelOperationResult LoadScene(std::string path) {
             ModelOperationResult status = ModelOperationResult();
             try {
@@ -54,18 +62,25 @@ namespace s21
             }
             return status;
         };
-
+        
+        /*!
+            \brief Метод для перемщении модели относительно осей.
+            \param x
+            \param y
+            \param z
+            \details Изменяет напрямую координаты вершин, никак не взаимодействут с движком представления.
+        */
         ModelOperationResult MoveScene(double x, double y, double z) {
             ModelOperationResult status = ModelOperationResult();
             try {
                 BaseTransormation* transfer = new MoveTransformation();
-                if (abs(x) > 1e-7) {
+                if (fabs(x) > 1e-7) {
                     transfer->TransformSceneX(x, *scene_);
                 }
-                if (abs(y) > 1e-7) {
+                if (fabs(y) > 1e-7) {
                     transfer->TransformSceneY(y, *scene_);
                 }
-                if (abs(z) > 1e-7) {
+                if (fabs(z) > 1e-7) {
                     transfer->TransformSceneZ(z, *scene_);
                 }
                 delete transfer;
@@ -77,17 +92,24 @@ namespace s21
             return status;
         };
 
+        /*!
+            \brief Метод для поворота модели относительно осей.
+            \param x
+            \param y
+            \param z
+            \details Изменяет напрямую координаты вершин, никак не взаимодействут с движком представления.
+        */
         ModelOperationResult RotateScene(double x, double y, double z) {
             ModelOperationResult status = ModelOperationResult();
             try {
                 BaseTransormation* transfer = new RotateTransformation();
-                if (abs(x) > 1e-7) {
+                if (fabs(x) > 1e-7) {
                     transfer->TransformSceneX(x, *scene_);
                 }
-                if (abs(y) > 1e-7) {
+                if (fabs(y) > 1e-7) {
                     transfer->TransformSceneY(y, *scene_);
                 }
-                if (abs(z) > 1e-7) {
+                if (fabs(z) > 1e-7) {
                     transfer->TransformSceneZ(z, *scene_);
                 }
                 delete transfer;
@@ -99,11 +121,18 @@ namespace s21
             return status;
         };
 
+        /*!
+            \brief Метод для масштабирования модели относительно осей.
+            \param x
+            \param y
+            \param z
+            \details Изменяет напрямую координаты вершин, никак не взаимодействут с движком представления.
+        */
         ModelOperationResult ScaleScene(double scale) {
             ModelOperationResult status = ModelOperationResult();
             try {
                 BaseTransormation* transfer = new ScaleTransformation();
-                if (abs(scale) > 1e-7) {
+                if (fabs(scale) > 1e-7) {
                     transfer->TransformSceneX(scale, *scene_);
                 }
                 delete transfer;
@@ -114,12 +143,13 @@ namespace s21
             return status;
         };
 
-        /* Не по диаграмме. Эти геттеры нужны для сохранения паттерна Фасад */
-
         Scene* GetScene() const noexcept {
             return scene_;
         };
 
+        /*!
+            \brief Геттер для формирования std::vector вершин, пригодных для обработки OpenGL.
+        */
         std::vector<double>* GetVertices() {
             vertices_.clear();
             for (auto it_figure = scene_->GetFigures().begin(); it_figure != scene_->GetFigures().end(); ++it_figure) {
@@ -132,12 +162,15 @@ namespace s21
             return &vertices_;
         };
 
+        /*!
+            \brief Геттер для формирования std::vector индексов вершин (линий), пригодных для обработки OpenGL.
+        */
         std::vector<int>* GetLines() {
             lines_.clear();
             for (auto it_figure = scene_->GetFigures().begin(); it_figure != scene_->GetFigures().end(); ++it_figure) {
                 for (auto it_edges = it_figure.base()->GetEdges().begin(); it_edges != it_figure.base()->GetEdges().end(); ++it_edges) {
-                    lines_.push_back(it_edges.base()->GetBegin()->GetPosition().index);
-                    lines_.push_back(it_edges.base()->GetEnd()->GetPosition().index);
+                    lines_.push_back(it_edges.base()->GetBegin());
+                    lines_.push_back(it_edges.base()->GetEnd());
                 }
             }
             return &lines_;

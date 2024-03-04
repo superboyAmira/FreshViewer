@@ -5,22 +5,29 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QSettings>
-
+//set(CMAKE_PREFIX_PATH "/home/superboy/Qt/6.6.2/gcc_64/lib/cmake/Qt6")
 /*
-Использование способа организации кода MVC подразумевает структурную реализацию
-поведенческого паттерна Наблюдатель (Observer),
-в конкретике - Представление является Obreverable, а контроллер Observer, реагрующий на
-изменение модели путем связки сигналов представления с методами контроллера.
-*/
+ * Использование способа организации кода MVC подразумевает структурную реализацию
+ * поведенческого паттерна Наблюдатель (Observer),
+ * в конкретике - Представление является Obreverable, а контроллер Observer, реагрующий на
+ * изменение модели путем связки сигналов представления с методами контроллера.
+ */
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
+
+/*!
+ * \brief Класс объекта представления.
+ */
 class View;
 }
 QT_END_NAMESPACE
 
 namespace s21 {
 
+/*!
+ * \brief Класс реализующий логику графического интерфейса приложения.
+ */
 class View : public QWidget
 {
     Q_OBJECT
@@ -34,14 +41,29 @@ public:
     void SetLines(std::vector<int>* lines);
 
 signals:
+    /*!
+     * \brief Сигнал для триггера Наблюдателя(Controller).
+     */
     void ControllerOpenFile(QString path);
 
+    /*!
+     * \brief Сигнал для триггера Наблюдателя(Controller).
+     */
     void ControllerRotateModel(double x, double y, double z);
 
+    /*!
+     * \brief Сигнал для триггера Наблюдателя(Controller).
+     */
     void ControllerMoveModel(double x, double y, double z);
 
+    /*!
+     * \brief Сигнал для триггера Наблюдателя(Controller).
+     */
     void ControllerScaleModel(double scale);
 
+    /*!
+     * \brief Сигнал для триггера Наблюдателя(Controller).
+     */
     void ControllerSaveState(QSettings& state);
 
 private slots:

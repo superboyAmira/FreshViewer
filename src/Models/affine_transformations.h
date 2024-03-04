@@ -3,38 +3,61 @@
 
 #include "scene.h"
 
-/*
-В данном классе используется поведенческий паттерн Стратегия.
-BaseTransformation выступает в роли абстрактного класса (интерфейса)
-для производных классов MoveTransformation, RotateTransformation, ScaleTransformation.
+/*!
+    \details В данном классе используется поведенческий паттерн Стратегия.
+    BaseTransformation выступает в роли абстрактного класса (интерфейса)
+    для производных классов MoveTransformation, RotateTransformation, ScaleTransformation.
 */
 
 namespace s21
 {
+    /*!
+        \brief Абстрактный класс стратегий для афинных преобразований.
+    */
     class BaseTransormation {
         public:
             virtual ~BaseTransormation() = default;
             virtual void TransformSceneX(double x, Scene& scene) = 0;
             virtual void TransformSceneY(double y, Scene& scene) = 0;
             virtual void TransformSceneZ(double z, Scene& scene) = 0;
-            // virtual void TransformSceneScale(double angle, Scene& scene);
     };
 
+    /*!
+        \brief Дочерний класс релизующий стратегию перемещения 3Д модели.
+    */
     class MoveTransformation : public BaseTransormation {
         public:
             MoveTransformation() = default;
+
             ~MoveTransformation() noexcept = default; 
 
+            /*!
+                \brief Перемещение 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param x коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneX(double x, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     it.base()->GetPosition().X += x;
                 }
             };
+
+            /*!
+                \brief Перемещение 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param y коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneY(double y, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     it.base()->GetPosition().Y += y;
                 }
             };
+
+            /*!
+                \brief Перемещение 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param z коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneZ(double z, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     it.base()->GetPosition().Z += z;
@@ -42,10 +65,20 @@ namespace s21
             };
     };
 
+    /*!
+        \brief Дочерний класс релизующий стратегию поворта 3Д модели.
+    */
     class RotateTransformation : public BaseTransormation {
         public:
             RotateTransformation() = default;
+
             ~RotateTransformation() noexcept = default; 
+            
+            /*!
+                \brief Поворот 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param x коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneX(double x, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     double temp_y = it.base()->GetPosition().Y;
@@ -54,6 +87,12 @@ namespace s21
                     it.base()->GetPosition().Z = (-1 * temp_y) * sin(x) + cos(x) * temp_z;
                 }
             };
+
+            /*!
+                \brief Поворот 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param y коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneY(double y, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     double temp_x = it.base()->GetPosition().X;
@@ -62,6 +101,12 @@ namespace s21
                     it.base()->GetPosition().Z = (-1 * temp_x) * sin(y) + cos(y) * temp_z;
                 }
             };
+
+            /*!
+                \brief Поворот 3Д модели относительно 3-х осей согласно коэффицентам.
+                \param z коэффицент поворота.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneZ(double z, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     double temp_x = it.base()->GetPosition().X;
@@ -72,10 +117,20 @@ namespace s21
             };
     };
 
+    /*!
+        \brief Дочерний класс релизующий стратегию изменения масштаба 3Д модели.
+    */
     class ScaleTransformation : public BaseTransormation {
         public:
             ScaleTransformation() = default;
+            
             ~ScaleTransformation() noexcept = default; 
+
+            /*!
+                \brief Изменеие масштаба 3Д модели.
+                \param x коэффицент масштабирования.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneX(double x, Scene& scene) override {
                 for (auto it = scene.GetFigures().at(0).GetVertices().begin(); it !=  scene.GetFigures().at(0).GetVertices().end(); ++it) {
                     it.base()->GetPosition().X *= x;
@@ -83,9 +138,21 @@ namespace s21
                     it.base()->GetPosition().Z *= x;
                 }
             };
+            
+            /*!
+                \brief Изменеие масштаба 3Д модели.
+                \param y коэффицент масштабирования.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneY(double y, Scene& scene) override {
                 TransformSceneX(y, scene);
             };
+            
+            /*!
+                \brief Изменеие масштаба 3Д модели.
+                \param z коэффицент масштабирования.
+                \param scene ссылка на общий массив данных вершин.
+            */
             void TransformSceneZ(double z, Scene& scene) override {
                 TransformSceneX(z, scene);
             };

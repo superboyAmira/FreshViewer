@@ -5,9 +5,9 @@ TEST_SRC = GTest/*.cc
 TEST_NAME = test
 
 ifeq ($(OS), Darwin)
-	NAME_APP=3DViewerV2.app
+	NAME_APP=FreshViewer.app
 else
-	NAME_APP=3DViewerV2
+	NAME_APP=FreshViewer
 endif
 
 P_NAME = FreshViewer
@@ -17,18 +17,18 @@ P_DOCS_DIR = Docs
 
 
 
-all: clean test
+all: clean test install
 
 install:
-	rm -rf build
-	mkdir build
-	cd Views && qmake && make && mv 3DViewer.app ../build && cd ..
+	rm -rf $(P_BUILD_DIR)
+	cmake -S $(P_VIEW_DIR) -B $(P_BUILD_DIR) #--debug-find-pkg=Qt6Widgets
+	make -C $(P_BUILD_DIR) FreshViewer
 
 uninstall:
-	rm -rf build*
-	rm -rf qt_files/moc*
-	rm -rf qt_files/*.o
-	rm -rf qt_files/ui*
+	rm -rf $(P_BUILD_DIR)*
+	rm -rf $(P_VIEW_DIR)/moc*
+	rm -rf $(P_VIEW_DIR)/*.o
+	# rm -rf $(P_VIEW_DIR)/ui*
 
 doxygen:
 	rm -rf $(P_DOCS_DIR)
@@ -39,18 +39,18 @@ dvi: doxygen
 	open ./$(P_DOCS_DIR)/html/annotated.html
 
 dist: install
-	rm -rf Archive_3DViewer/
-	mkdir Archive_3DViewer/
-	mkdir Archive_3DViewer/src
-	cp -r ./build/3DViewer.app Archive_3DViewer/src/
-	tar cvzf Archive_3DViewer.tgz Archive_3DViewer/
-	rm -rf Archive_3DViewer/
+	rm -rf FreshViewer_archive/
+	mkdir FreshViewer_archive/
+	mkdir FreshViewer_archive/src
+	cp -r ./build/$(NAME_APP) FreshViewer_archive/src/
+	tar cvzf FreshViewer_archive.tgz FreshViewer_archive/
+	rm -rf FreshViewer_archive/
 
 test: 
 	$(G++) $(CHECKFLAGS) $(TEST_SRC) -o $(TEST_NAME) $(TEST_LIBS) -g
 	./$(TEST_NAME) --gtest_break_on_failure
 
-clean:
+clean: uninstall
 	@echo "\e[32mClean s in progress...\e[0m"
 	rm -rf lib_obj test lib/*.o ./*.a ./*.o ./a.out gcov_test *.html *.css report lib/*.dSYM ./*.gcno ./*.gcda ./*.info ./*.dSYM ./CPPLINT*
 	@echo "\e[32mClean done!\e[0m"
@@ -80,7 +80,7 @@ fsanitize:
 valgrind: test
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./$(TEST_NAME)
 
-GTest_install:
+gtest_install:
 	echo -e "\e[32m[---Start install GTest lib ubuntu20---]\e[0m"
 	sudo apt-get install libgtest-dev libgmock-dev
 	sudo apt-get install libtbb-dev
@@ -93,3 +93,9 @@ GTest_install:
 	cd ..
 	sudo cp lib/* /usr/lib
 	echo -e "\e[32m[---Done---]\e[0m"
+
+doxygen_install:
+	echo -e "\e[32m[---Start install doxygen---]\e[0m"
+	sudo apt-get install doxygen
+	echo -e "\e[32m[---Done---]\e[0m"
+	

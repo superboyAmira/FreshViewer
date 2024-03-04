@@ -4,22 +4,50 @@
 #include "vertex.h"
 
 namespace s21 {
+
+    /*!
+        \brief Класс хранящий конкретный экземпляр линии.
+        \details size_t begin_ - индекс начала линии, size_t end_ - индекс конца линии.
+    */
     class Edge {
         public:
-            void SetBegin(Vertex* begin) noexcept { begin_ = begin; };
-            void SetEnd(Vertex* end) noexcept { end_ = end; };
+            ~Edge() noexcept = default;
+
+            /*!
+                \brief Очистка данных класса.
+            */
             void clear() noexcept {
-                begin_ = nullptr;
-                end_ = nullptr;
+                begin_ = 0;
+                end_ = 0;
             };
 
-            Vertex* GetBegin() const noexcept { return begin_; };
+            /*!
+                \brief Сеттер начального индекса вершин в приватное поле типа size_t.
+                \param begin индекс начальной вершины.
+            */
+            void SetBegin(size_t begin) noexcept { begin_ = begin; };
 
-            Vertex* GetEnd() const noexcept { return end_; };
+            /*!
+                \brief Сеттер конченого индекса вершин в приватное поле типа size_t.
+                \param end индекс конечной вершины.
+            */
+            void SetEnd(size_t end) noexcept { end_ = end; };
+
+            /*!
+                \brief Геттер начального индекса вершин.
+                \return size_t
+            */
+            size_t GetBegin() const noexcept { return begin_; };
+
+            /*!
+                \brief Геттер конченого индекса вершин.
+                \return size_t
+            */
+            size_t GetEnd() const noexcept { return end_; };
             
         private:
-            Vertex* begin_;
-            Vertex* end_;
+            size_t begin_;
+            size_t end_;
     };
 }
 
