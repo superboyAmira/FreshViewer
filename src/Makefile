@@ -15,14 +15,19 @@ P_VIEW_DIR = Views
 P_BUILD_DIR = build
 P_DOCS_DIR = Docs
 
-
-
 all: clean test install
 
-install:
+install: 
 	rm -rf $(P_BUILD_DIR)
-	cmake -S $(P_VIEW_DIR) -B $(P_BUILD_DIR) #--debug-find-pkg=Qt6Widgets
-	make -C $(P_BUILD_DIR) FreshViewer
+	mkdir $(P_BUILD_DIR)
+	cmake -S $(P_VIEW_DIR) -B $(P_BUILD_DIR)
+	make -C $(P_BUILD_DIR)
+	rm -rf ../$(P_BUILD_DIR)
+	mkdir ../$(P_BUILD_DIR)
+	cp $(P_BUILD_DIR)/$(P_VIEW_DIR) ../$(P_BUILD_DIR)/
+	mv ../$(P_BUILD_DIR)/$(P_VIEW_DIR) ../$(P_BUILD_DIR)/FreshViewer
+	rm -rf $(P_BUILD_DIR)
+	open ../$(P_BUILD_DIR)
 
 uninstall:
 	rm -rf $(P_BUILD_DIR)*
@@ -38,11 +43,10 @@ doxygen:
 dvi: doxygen
 	open ./$(P_DOCS_DIR)/html/annotated.html
 
-dist: install
+dist:
 	rm -rf FreshViewer_archive/
 	mkdir FreshViewer_archive/
 	mkdir FreshViewer_archive/src
-	cp -r ./build/$(NAME_APP) FreshViewer_archive/src/
 	tar cvzf FreshViewer_archive.tgz FreshViewer_archive/
 	rm -rf FreshViewer_archive/
 
@@ -66,12 +70,12 @@ gcov_report: clean
 format: 
 	clang-format -style=google -i */*.cc
 	clang-format -style=google -i */*.h
-	clang-format -style=google -i */*.tpp
+#	clang-format -style=google -i */*.tpp
 
 clang-format: 
 	clang-format -style=google -n */*.cc
 	clang-format -style=google -n */*.h
-	clang-format -style=google -n */*.tpp
+#	clang-format -style=google -n */*.tpp
 
 fsanitize: 
 	$(G++) $(TEST_SRC) $(CHECKFLAGS) -g -fsanitize=address $(TEST_LIBS) -o $(TEST_NAME) 

@@ -1,61 +1,59 @@
 #ifndef VIEWOPENGLSCENE_H
 #define VIEWOPENGLSCENE_H
 
-#include <QWidget>
 #include <QMouseEvent>
-#include <QSettings>
-
-#include <QOpenGLWidget>
-#include <QOpenGLFunctions>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
+#include <QOpenGLWidget>
+#include <QSettings>
+#include <QWidget>
 
 namespace s21 {
 
-enum  ProjectrionType { CENTRAL, PARALLEL };
+enum ProjectrionType { CENTRAL, PARALLEL };
 
 enum VerticesType { QUAD, ROUNDED, NONE };
 
 enum LinesType { SOLID, DOTTED };
 
-class ViewOpenGLScene : public QOpenGLWidget
-{
-    Q_OBJECT
-public:
-    explicit ViewOpenGLScene(QWidget *parent = nullptr);
+class ViewOpenGLScene : public QOpenGLWidget {
+  Q_OBJECT
+ public:
+  explicit ViewOpenGLScene(QWidget *parent = nullptr);
 
-    void LoadScene();
+  void LoadScene();
 
-    void SetVertices(std::vector<double>&);
+  void SetVertices(std::vector<double> &);
 
-    void SetLines(std::vector<int>&);
+  void SetLines(std::vector<int> &);
 
-    QSettings* GetState();
+  QSettings *GetState();
 
-protected:
-    void initializeGL() override;
-    void resizeGL(int width, int height) override;
-    void paintGL() override;
+ protected:
+  void initializeGL() override;
+  void resizeGL(int width, int height) override;
+  void paintGL() override;
 
-private:
-    std::vector<double> vertices_;
-    std::vector<int> lines_;
+ private:
+  std::vector<double> vertices_;
+  std::vector<int> lines_;
 
-    /*
-     * Mouse Moving Implementation
-     */
-    QPoint mPos;
-    double xRot, yRot, zoom;
-    void mouseMoveEvent(QMouseEvent *) override;
-    void mousePressEvent(QMouseEvent *) override;
-    void wheelEvent(QWheelEvent *) override;
+  /*
+   * Mouse Moving Implementation
+   */
+  QPoint mPos;
+  double xRot, yRot, zoom;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void mousePressEvent(QMouseEvent *) override;
+  void wheelEvent(QWheelEvent *) override;
 
-    /*
-     * Settings
-     */
-    QSettings state_;
-    void SetDefault();
+  /*
+   * Settings
+   */
+  QSettings state_;
+  void SetDefault();
 };
 
-}
+}  // namespace s21
 
-#endif // VIEWOPENGLSCENE_H
+#endif  // VIEWOPENGLSCENE_H

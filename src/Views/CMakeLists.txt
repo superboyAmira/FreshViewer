@@ -16,11 +16,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets QtOpenGL OpenGLWidgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+include_directories(${QT_QTOPENGL_INCLUDE_DIR}  ${OPENGL_INCLUDE_DIRS})
+
 set(PROJECT_SOURCES
     main.cc
         view.cc
         view.h
         view.ui
+        viewopenglscene.cc
+        viewopenglscene.h
+        ../Controllers/controller.cc
+        ../Controllers/controller.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -56,6 +64,8 @@ target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
 target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
 target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+
+target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::Widgets GL ${OPENGL_LIBRARIES})
 
 # target_link_libraries(Views PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 # target_link_libraries(Views PRIVATE Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
